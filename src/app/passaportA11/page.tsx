@@ -25,6 +25,7 @@ import { Mail, Phone, RefreshCw, CalendarIcon} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TopNav } from "@/components/TopNav";
 import { AdminFooter } from "@/components/admin/AdminFooter";
+import { Resolver } from 'react-hook-form';
 
 // Validation schema
 const formSchema = z.object({
@@ -72,42 +73,47 @@ export default function PassportForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      documentType: "",
-      modality: "",
-      fee: "",
-      fullName: "",
-      lastName: "",
-      birthDate: "",
-      idNumber: "",
-      lifetimeId: "",
-      idIssuePlace: "",
-      birthCountry: "",
-      nationality: "Moçambicana",
-      province: "",
-      city: "",
-      travelReason: "",
-      documentLocation: "",
-      countryCode: "258",
-      phone: "",
-      email: "",
-      terms: false
-    }
-  });
+  resolver: zodResolver(formSchema) as Resolver<FormData>,
+  defaultValues: {
+    documentType: "",
+    modality: "",
+    fee: "",
+    fullName: "",
+    lastName: "",
+    birthDate: "",
+    idNumber: "",
+    lifetimeId: "",
+    idExpiryDate: "",
+    idIssuePlace: "",
+    birthCountry: "",
+    nationality: "Moçambicana",
+    province: "",
+    city: "",
+    travelReason: "",
+    documentLocation: "",
+    countryCode: "258",
+    phone: "",
+    email: "",
+    terms: false,
+    preferredDate: "",
+    observation: "",
+    neighborhood: ""
+  }
+});
 
   const nextStep = async () => {
-    const stepFields = {
-      0: ['documentType', 'modality', 'fee'],
-      1: ['fullName', 'lastName', 'birthDate', 'idNumber', 'lifetimeId', 'idExpiryDate', 'idIssuePlace', 'birthCountry', 'province', 'city'],
-      2: ['travelReason', 'documentLocation', 'preferredDate', 'countryCode', 'phone']
-    }[currentStep];
-
-    const isValid = await form.trigger(stepFields as any);
-    if (isValid) {
-      setCurrentStep((prev) => Math.min(prev + 1, totalSteps - 1));
-    }
+  const stepFields: Record<number, (keyof FormData)[]> = {
+    0: ['documentType', 'modality', 'fee'],
+    1: ['fullName', 'lastName', 'birthDate', 'idNumber', 'lifetimeId', 'idExpiryDate', 'idIssuePlace', 'birthCountry', 'province', 'city'],
+    2: ['travelReason', 'documentLocation', 'preferredDate', 'countryCode', 'phone']
   };
+
+  const currentFields = stepFields[currentStep] || [];
+  const isValid = await form.trigger(currentFields);
+  if (isValid) {
+    setCurrentStep((prev) => Math.min(prev + 1, totalSteps - 1));
+  }
+};
 
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
 
