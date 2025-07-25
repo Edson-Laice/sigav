@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { RocketIcon } from "lucide-react";
 import { motion, Variants } from "framer-motion";
+import { useTranslation } from '@/hooks/UseTranslation';
 
 // Animations com tipagem correta
 const containerVariants: Variants = {
@@ -37,18 +38,29 @@ const floatingVariants: Variants = {
     transition: {
       duration: 3,
       repeat: Infinity,
-      ease: "easeInOut" as const // Tipagem correta para ease
+      ease: "easeInOut" as const
     }
   }
 };
 
 export default function NotFound() {
+  const { t, lang } = useTranslation();
+
+  // Verifique se as chaves de tradução existem no seu arquivo de traduções
+  const translations = {
+    title: t('title'),
+    description: t('description'),
+    homeButton: t('homeButton'),
+    helpButton: t('helpButton'),
+  };
+
   return (
     <motion.div
       className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-background to-muted p-6"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
+      key={lang} // Isso força o rerender quando o idioma muda
     >
       <motion.div 
         className="max-w-lg text-center space-y-6"
@@ -73,16 +85,14 @@ export default function NotFound() {
           className="text-2xl font-semibold"
           variants={itemVariants}
         >
-          Oops! Página perdida no espaço
+          {translations.title}
         </motion.h2>
 
         <motion.p 
           className="text-muted-foreground"
           variants={itemVariants}
         >
-          O conteúdo que você procura pode ter sido movido ou não existe mais.
-          <br />
-          Enquanto isso, que tal explorar outras áreas do nosso site?
+          {translations.description}
         </motion.p>
 
         <motion.div 
@@ -90,10 +100,10 @@ export default function NotFound() {
           variants={itemVariants}
         >
           <Button asChild variant="outline">
-            <Link href="/">Página inicial</Link>
+            <Link href="/">{translations.homeButton}</Link>
           </Button>
           <Button asChild>
-            <Link href="/contato">Preciso de ajuda</Link>
+            <Link href="/contato">{translations.helpButton}</Link>
           </Button>
         </motion.div>
       </motion.div>

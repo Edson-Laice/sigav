@@ -38,25 +38,15 @@ export function TopNav() {
   const { t, lang, setLang } = useTranslation();
   const [search, setSearch] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Inicia como true para carregar automaticamente
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Função para simular carregamento
-  const simulateLoading = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success(t("loading_complete"));
-    }, 2000);
-  };
-
-  // Efeito para disparar o loading automaticamente após 3 segundos
   useEffect(() => {
     const timer = setTimeout(() => {
-      simulateLoading();
+      setIsLoading(false);
     }, 2000);
     
     return () => clearTimeout(timer);
-  }, []); // Array vazio para executar apenas uma vez no mount
+  }, []);
 
   const currentLanguage = LANGUAGES.find(l => l.code === lang) || DEFAULT_LANGUAGE;
 
@@ -81,21 +71,17 @@ export function TopNav() {
     setIsDialogOpen(true);
   };
 
-  // Skeleton version of the TopNav
   if (isLoading) {
     return (
       <header className="w-full border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center justify-between px-4 md:px-8 py-3 gap-2">
-          {/* Logo Skeleton */}
           <Skeleton className="h-[38px] w-[90px] rounded-lg" />
           
-          {/* Search and schedule bar Skeleton */}
           <div className="flex items-center gap-2 flex-1 max-w-md mx-4">
             <Skeleton className="h-10 w-24 rounded-md" />
             <Skeleton className="h-10 w-full rounded-md" />
           </div>
 
-          {/* Right-side controls Skeleton */}
           <div className="flex items-center gap-2 md:gap-3">
             <Skeleton className="h-10 w-24 rounded-md" />
             <Skeleton className="h-10 w-10 rounded-full" />
@@ -103,8 +89,6 @@ export function TopNav() {
             <Skeleton className="h-10 w-24 rounded-md" />
           </div>
         </div>
-
-        
       </header>
     );
   }
@@ -113,7 +97,6 @@ export function TopNav() {
     <>
       <header className="w-full border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center justify-between px-4 md:px-8 py-3 gap-2">
-          {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <Image
               src="/image/SIGAV_Final.png"
@@ -125,7 +108,6 @@ export function TopNav() {
             />
           </Link>
 
-          {/* Search and schedule bar */}
           <div className="flex items-center gap-2 flex-1 max-w-md mx-4">
             <Menubar>
               <MenubarMenu>
@@ -154,9 +136,7 @@ export function TopNav() {
             </form>
           </div>
 
-          {/* Right-side controls */}
           <div className="flex items-center gap-2 md:gap-3">
-            {/* Green line */}
             <a
               href="tel:+25890243"
               onClick={handleGreenLineClick}
@@ -166,7 +146,6 @@ export function TopNav() {
               <span className="hidden sm:inline">{t("green_line")}</span> (90243)
             </a>
 
-            {/* Language selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
@@ -215,10 +194,8 @@ export function TopNav() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Theme toggle */}
             <ModeToggle />
 
-            {/* Access */}
             <Link
               href="/access"
               className="flex items-center gap-2 font-semibold px-3 py-2 rounded-md border hover:bg-accent transition text-sm"
@@ -228,8 +205,6 @@ export function TopNav() {
             </Link>
           </div>
         </div>
-
-        
       </header>
 
       <SearchDialog 

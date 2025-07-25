@@ -53,7 +53,7 @@ export default function SchedulePage() {
               <TabsTrigger value="national">
                 <div className="flex items-center justify-center gap-2">
                   <Image 
-                    src="/images/flagmoz.png" 
+                    src="https://img.icons8.com/?size=100&id=MYEmtUV2MO8N&format=png&color=000000" 
                     alt="Moz Flag" 
                     width={24} 
                     height={24}
@@ -67,7 +67,7 @@ export default function SchedulePage() {
               <TabsTrigger value="foreign">
                 <div className="flex items-center justify-center gap-2">
                   <Image 
-                    src="/images/flagforeign.png" 
+                    src="https://img.icons8.com/?size=100&id=WOC5B0qrUhx7&format=png&color=000000" 
                     alt="Foreign Flag" 
                     width={24} 
                     height={24}

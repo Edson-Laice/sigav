@@ -2,8 +2,8 @@
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
+import { useTranslation } from '@/hooks/UseTranslation';
 
-// Componente Skeleton para os passos
 function AdminStepsSkeleton() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -26,8 +26,8 @@ function AdminStepsSkeleton() {
 
 export function AdminSteps() {
   const [isLoading, setIsLoading] = useState(true);
+  const { t } = useTranslation();
 
-  // Simula o carregamento dos dados
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -39,18 +39,18 @@ export function AdminSteps() {
   const steps = [
     {
       number: 1,
-      title: "1º PASSO",
-      description: "Navegue até a lista de documentos para Nacionais e Estrangeiros através da opção Agendar Serviço"
+      title: t('stp1') || "1º PASSO",
+      description: t('stp1_desc') || "Navegue até a lista de documentos para Nacionais e Estrangeiros através da opção Agendar Serviço"
     },
     {
       number: 2,
-      title: "2º PASSO",
-      description: "Selecione o documento que pretende, preencha o formulário por completo e clique em Submeter"
+      title: t('stp2') || "2º PASSO",
+      description: t('stp2_desc') || "Selecione o documento que pretende, preencha o formulário por completo e clique em Submeter"
     },
     {
       number: 3,
-      title: "3º PASSO",
-      description: "Confirme o seu agendamento e receberá a notificação por SMS ou e-mail com o respectivo código de agendamento"
+      title: t('stp3') || "3º PASSO",
+      description: t('stp3_desc') || "Confirme o seu agendamento e receberá a notificação por SMS ou e-mail com o respectivo código de agendamento"
     }
   ];
 
