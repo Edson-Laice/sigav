@@ -74,19 +74,34 @@ export function TopNav() {
   if (isLoading) {
     return (
       <header className="w-full border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center justify-between px-4 md:px-8 py-3 gap-2">
-          <Skeleton className="h-[38px] w-[90px] rounded-lg" />
-          
-          <div className="flex items-center gap-2 flex-1 max-w-md mx-4">
+        <div className="flex flex-col md:flex-row items-center justify-between px-4 md:px-8 py-3 gap-2">
+          <div className="flex items-center justify-between w-full md:w-auto">
+            <Skeleton className="h-[38px] w-[90px] rounded-lg" />
+            
+            <div className="flex items-center gap-2 md:hidden">
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <Skeleton className="h-10 w-10 rounded-full" />
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center gap-2 flex-1 max-w-md mx-4">
             <Skeleton className="h-10 w-24 rounded-md" />
             <Skeleton className="h-10 w-full rounded-md" />
           </div>
 
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="hidden md:flex items-center gap-2 md:gap-3">
             <Skeleton className="h-10 w-24 rounded-md" />
             <Skeleton className="h-10 w-10 rounded-full" />
             <Skeleton className="h-10 w-10 rounded-full" />
             <Skeleton className="h-10 w-24 rounded-md" />
+          </div>
+
+          <div className="w-full md:hidden mt-2">
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-10 w-24 rounded-md" />
+              <Skeleton className="h-10 w-full rounded-md" />
+            </div>
           </div>
         </div>
       </header>
@@ -96,19 +111,119 @@ export function TopNav() {
   return (
     <>
       <header className="w-full border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center justify-between px-4 md:px-8 py-3 gap-2">
-          <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/image/SIGAV_Final.png"
-              alt="SIGAV Logo"
-              width={90}
-              height={38}
-              className="rounded-lg cursor-pointer"
-              priority
-            />
-          </Link>
+        <div className="flex flex-col md:flex-row items-center justify-between px-4 md:px-8 py-3 gap-2">
+          {/* Primeira linha (mobile) */}
+          <div className="flex items-center justify-between w-full md:w-auto">
+            <Link href="/" className="flex-shrink-0">
+              <Image
+                src="/image/SIGAV_Final.png"
+                alt="SIGAV Logo"
+                width={90}
+                height={38}
+                className="rounded-lg cursor-pointer"
+                priority
+              />
+            </Link>
 
-          <div className="flex items-center gap-2 flex-1 max-w-md mx-4">
+            <div className="flex items-center gap-2 md:hidden">
+              <a
+                href="tel:+25890243"
+                onClick={handleGreenLineClick}
+                className="flex items-center gap-1 p-2 rounded-md bg-green-100 text-green-600 hover:bg-green-200 transition"
+              >
+                <i className="ri-phone-line text-xl" />
+              </a>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="flex items-center gap-2 p-2 rounded-md hover:bg-muted transition"
+                    aria-label={t("select_language")}
+                  >
+                    <ReactCountryFlag
+                      countryCode={currentLanguage.countryCode}
+                      svg
+                      style={{
+                        width: '1.25em',
+                        height: '1.25em',
+                        borderRadius: '50%',
+                        objectFit: 'cover'
+                      }}
+                      aria-label={currentLanguage.label}
+                    />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[180px]">
+                  {LANGUAGES.map((language) => (
+                    <DropdownMenuItem
+                      key={language.code}
+                      onClick={() => setLang(language.code)}
+                      className={lang === language.code ? "bg-accent font-medium" : ""}
+                    >
+                      <ReactCountryFlag
+                        countryCode={language.countryCode}
+                        svg
+                        style={{
+                          width: '1em',
+                          height: '1em',
+                          marginRight: '0.5em',
+                          borderRadius: '50%'
+                        }}
+                        aria-hidden
+                      />
+                      {language.label}
+                      {lang === language.code && (
+                        <i className="ri-check-line ml-auto text-primary" />
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <ModeToggle />
+
+              <Link
+                href="/access"
+                className="flex items-center gap-2 p-2 rounded-md border hover:bg-accent transition"
+              >
+                <i className="ri-login-circle-line text-xl" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Segunda linha (mobile) - Agendar e Pesquisa */}
+          <div className="w-full md:hidden mt-2">
+            <div className="flex items-center gap-2">
+              <Menubar className="border-none">
+                <MenubarMenu>
+                  <MenubarTrigger asChild>
+                    <Link
+                      href="/agendar"
+                      className="font-semibold px-3 py-2 rounded-md transition text-sm hover:bg-accent w-full"
+                    >
+                      {t("schedule")}
+                    </Link>
+                  </MenubarTrigger>
+                </MenubarMenu>
+              </Menubar>
+              
+              <form onSubmit={handleSearch} className="relative flex-1">
+                <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-xl text-muted-foreground" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  onClick={handleInputClick}
+                  placeholder={t("search_placeholder")}
+                  className="w-full pl-10 pr-3 py-2 rounded-md border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition text-sm cursor-pointer"
+                  readOnly
+                />
+              </form>
+            </div>
+          </div>
+
+          {/* Desktop layout */}
+          <div className="hidden md:flex items-center gap-2 flex-1 max-w-md mx-4">
             <Menubar>
               <MenubarMenu>
                 <MenubarTrigger asChild>
@@ -136,7 +251,7 @@ export function TopNav() {
             </form>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="hidden md:flex items-center gap-2 md:gap-3">
             <a
               href="tel:+25890243"
               onClick={handleGreenLineClick}
